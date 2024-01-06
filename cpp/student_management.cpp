@@ -3,10 +3,9 @@ using namespace std;
 
 class course
 {
+public:
     string course_name;
     int fees;
-
-public:
     void setCourse(string course_name)
     {
         this->course_name = course_name;
@@ -25,6 +24,12 @@ class student : public course
     int mobile;
 
 public:
+    student()
+    {
+        roll = 0;
+        name = "";
+        mobile = 0;
+    }
     static int count;
 
     int getRoll()
@@ -44,16 +49,42 @@ public:
         cout << "Enter Your Mobile : " << endl;
         cin >> this->mobile;
 
+        this->setCourse("Default");
+        this->setFees(0);
+
         return roll;
+    }
+
+    void displayStudentDetails()
+    {
+        cout << "Roll No: " << roll << endl;
+        cout << "Name: " << name << endl;
+        cout << "Mobile: " << mobile << endl;
+        cout << "Course: " << course_name << endl;
+        cout << "Fees: " << fees << endl;
     }
 };
 
 int student ::count = 0;
 
-int main()
+void displayAllStudents(student array[], int size)
 {
 
-    student student_array[500];
+    cout << "List of All Students : " << endl;
+    cout << endl;
+    for (int i = 0; i < size; i++)
+    {
+        if (array[i].getRoll() != 0)
+        {
+            array[i].displayStudentDetails();
+        }
+    }
+}
+
+int main()
+{
+    const int array_size = 500;
+    student student_array[array_size];
 
     int choice;
     int i = 0;
@@ -62,7 +93,7 @@ int main()
     {
         cout << endl;
         cout << endl;
-        cout << " 1: Add Student. \n 2: Take Course \n 3: Display Student with Course . \n 4: Display Students .\n 5: Exit ." << endl;
+        cout << " 1: Add Student. \n 2: Take Course \n 3: Display Student Details . \n 4: Display Students .\n 5: Exit ." << endl;
         cout << endl;
 
         cin >> choice;
@@ -102,6 +133,7 @@ int main()
                     student_array[temp_roll - 1].setCourse("DBDA");
                     student_array[temp_roll - 1].setFees(5000);
                     cout << "Course Registered ! " << endl;
+                    break;
                 }
             }
             else
@@ -110,6 +142,30 @@ int main()
                 break;
             }
 
+        case 3:
+        {
+            int temp_roll;
+            cout << "Enter Your Roll No : ";
+            cin >> temp_roll;
+
+            if (temp_roll < 500 && temp_roll > 0)
+            {
+                cout << endl;
+                cout << "Details :" << endl;
+                cout << endl;
+                student_array[temp_roll - 1].displayStudentDetails();
+                break;
+            }
+            else
+            {
+
+                cout << "Enter Valid Roll No. !";
+                break;
+            }
+        }
+        case 4:
+            displayAllStudents(student_array, array_size);
+            break;
         default:
             cout << "Enter a valid choice !" << endl;
         }
