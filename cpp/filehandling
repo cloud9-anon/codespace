@@ -1,0 +1,47 @@
+#include <iostream>
+#include <fstream>
+
+int main() {
+    // Create and write to the text.txt file
+    std::ofstream outputFile("text.txt");
+    if (outputFile.is_open()) {
+        outputFile << "abcdefghij";
+        outputFile.close();
+    } else {
+        std::cerr << "Unable to create text.txt file." << std::endl;
+        return 1;  // Exit with an error code
+    }
+
+    // Check if a character is present in the file
+    char targetCharacter;
+    std::cout << "Enter a character to check in the file: ";
+    std::cin >> targetCharacter;
+
+    std::ifstream inputFile("text.txt");
+    if (inputFile.is_open()) {
+        char currentCharacter;
+        bool found = false;
+
+        // Read characters from the file and check for the target character
+        while (inputFile.get(currentCharacter)) {
+            if (currentCharacter == targetCharacter) {
+                found = true;
+                break;
+            }
+        }
+
+        inputFile.close();
+
+        // Output the result
+        if (found) {
+            std::cout << "Character '" << targetCharacter << "' is present in the file." << std::endl;
+        } else {
+            std::cout << "Character '" << targetCharacter << "' is not present in the file." << std::endl;
+        }
+    } else {
+        std::cerr << "Unable to open text.txt file for reading." << std::endl;
+        return 1;  // Exit with an error code
+    }
+
+    return 0;
+}
