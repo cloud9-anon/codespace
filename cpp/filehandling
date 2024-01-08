@@ -1,46 +1,66 @@
+
 #include <iostream>
 #include <fstream>
 
-int main() {
-    // Create and write to the text.txt file
-    std::ofstream outputFile("text.txt");
-    if (outputFile.is_open()) {
-        outputFile << "abcdefghij";
-        outputFile.close();
-    } else {
-        std::cerr << "Unable to create text.txt file." << std::endl;
-        return 1;  // Exit with an error code
+int main(int argc, char *argv[])
+{
+    if (argc != 2)
+    {
+        std::cout << "Usage: " << argv[0] << " <filename>\n";
+        return 1;
     }
 
-    // Check if a character is present in the file
-    char targetCharacter;
-    std::cout << "Enter a character to check in the file: ";
-    std::cin >> targetCharacter;
+    std::ofstream fout(argv[1]);
 
-    std::ifstream inputFile("text.txt");
-    if (inputFile.is_open()) {
-        char currentCharacter;
-        bool found = false;
+    if (!fout)
+    {
+        std::cout << "Failed to create file " << argv[1] << "\n";
+        return 2;
+    }
 
-        // Read characters from the file and check for the target character
-        while (inputFile.get(currentCharacter)) {
-            if (currentCharacter == targetCharacter) {
-                found = true;
-                break;
-            }
+    std::cout << "Enter text to write to the file (0 to stop):\n";
+    char ch;
+    std::cin >> std::noskipws >> ch;
+
+    while (ch != '0')
+    {
+        fout << ch;
+        std::cin >> std::noskipws >> ch;
+    }
+
+    fout.close();
+
+    std::cout << "Enter a character to check if it's present in the file: ";
+    char searchChar;
+    std::cin >> searchChar;
+
+    std::ifstream fin(argv[1]);
+
+    if (!fin)
+    {
+        std::cout << "Failed to open file " << argv[1] << "\n";
+        return 3;
+    }
+
+    bool found = false;
+    char fileChar;
+
+    while (fin >> fileChar)
+    {
+        if (fileChar == searchChar)
+        {
+            found = true;
+            break;
         }
+    }
 
-        inputFile.close();
-
-        // Output the result
-        if (found) {
-            std::cout << "Character '" << targetCharacter << "' is present in the file." << std::endl;
-        } else {
-            std::cout << "Character '" << targetCharacter << "' is not present in the file." << std::endl;
-        }
-    } else {
-        std::cerr << "Unable to open text.txt file for reading." << std::endl;
-        return 1;  // Exit with an error code
+    if (found)
+    {
+        std::cout << "'" << searchChar << "' is present in the file.\n";
+    }
+    else
+    {
+        std::cout << "'" << searchChar << "' is not present in the file.\n";
     }
 
     return 0;
